@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bill History - Inventory Billing</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <div class="brand">
+
+        <div class="brand-icon">🛒</div>
+
+        <div>
+            <h1>
+                Inventory<span>Billing</span>
+            </h1>
+
+            <p>Inventory & Billing System</p>
+        </div>
+
+    </div>
+
+
+    <div class="top-search">
+
+        <span>🔍</span>
+
+        <input
+            type="text"
+            placeholder="Search products, customers, or bills..."
+        >
+
+    </div>
+
+
+    <div class="profile">
+
+        <div class="notification">🔔</div>
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div>
+            <strong>Admin</strong>
+            <small>Shop Owner</small>
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div>
+
+            <nav>
+
+                <a href="/dashboard">
+                    📊 Dashboard
+                </a>
+
+                <a href="/products">
+                    📦 Products
+                </a>
+
+                <a href="/customers">
+                    👥 Customers
+                </a>
+
+                <a href="/billing">
+                    🧾 Create Bill
+                </a>
+
+                <a href="/bill_history" class="active">
+                    📋 Bill History
+                </a>
+
+                <a href="/dashboard">
+                    📊 Reports
+                </a>
+
+                <a href="#">
+                    ⚙️ Settings
+                </a>
+
+                <a href="#">
+                    🚪 Logout
+                </a>
+
+            </nav>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <div class="page-title">
+
+            <div>
+
+                <h1>Bill History</h1>
+
+                <p>
+                    View all previously generated bills and sales records.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH + CREATE -->
+
+        <div class="product-toolbar">
+
+            <div class="product-search">
+
+                🔍
+
+                <input
+                    type="text"
+                    id="billSearch"
+                    placeholder="Search bills..."
+                    onkeyup="searchBills()"
+                >
+
+            </div>
+
+            <a href="/billing"
+               class="add-product-btn">
+
+                + Create New Bill
+
+            </a>
+
+        </div>
+
+
+        <!-- BILL HISTORY -->
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <h3>🧾 All Bills</h3>
+
+                <span>
+                    {{ bills|length }} bills
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table id="billTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Bill ID</th>
+
+                            <th>Date & Time</th>
+
+                            <th>Customer</th>
+
+                            <th>Product</th>
+
+                            <th>Quantity</th>
+
+                            <th>Total</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for bill in bills %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    #{{ bill['id'] }}
+                                </strong>
+                            </td>
+
+
+                            <td>
+                                {{ bill['bill_date'] }}
+                            </td>
+
+
+                            <td>
+                                {{ bill['customer_name'] }}
+                            </td>
+
+
+                            <td>
+                                {{ bill['product_name'] }}
+                            </td>
+
+
+                            <td>
+                                {{ bill['quantity'] }}
+                            </td>
+
+
+                            <td>
+                                <strong>
+                                    ₹{{ "%.2f"|format(bill['total']) }}
+                                </strong>
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="/bill/{{ bill['id'] }}"
+                                    class="bill-view-btn"
+                                    title="View Bill"
+                                >
+                                    👁️ View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="7"
+                                style="text-align:center;">
+
+                                No bills found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+function searchBills() {
+
+    let input =
+        document.getElementById("billSearch")
+        .value
+        .toLowerCase();
+
+    let rows =
+        document.querySelectorAll("#billTable tbody tr");
+
+    rows.forEach(function(row) {
+
+        let text =
+            row.innerText.toLowerCase();
+
+        if (text.includes(input)) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>

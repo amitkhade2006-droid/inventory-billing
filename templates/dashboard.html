@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Inventory Billing System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- TOP HEADER -->
+
+    <header class="top-header">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🛒
+            </div>
+
+            <div>
+                <h1>Inventory<span>Billing</span></h1>
+                <p>Inventory & Billing System</p>
+            </div>
+
+        </div>
+
+
+        <div class="top-search">
+
+            🔍
+
+            <input
+                type="text"
+                placeholder="Search products, customers, or bills..."
+            >
+
+        </div>
+
+
+       <div class="profile">
+
+    <div class="notification-wrapper">
+
+        <span class="notification"
+              onclick="toggleNotifications()">
+            🔔
+        </span>
+
+        {% if low_stock > 0 %}
+        <span class="notification-count">
+            {{ low_stock }}
+        </span>
+        {% endif %}
+
+        <div class="notification-box" id="notificationBox">
+
+            <h4>Notifications</h4>
+
+            {% if low_stock_products %}
+
+                {% for product in low_stock_products %}
+
+                <div class="notification-item">
+                    ⚠️
+                    <div>
+                        <strong>{{ product["name"] }}</strong>
+                        <small>
+                            Low Stock - Only
+                            {{ product["quantity"] }} left
+                        </small>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="notification-empty">
+                    ✅ No new notifications
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-icon">
+        👤
+    </div>
+
+
+    <div class="profile-details">
+
+        <strong>Admin</strong>
+
+        <small>Shop Owner</small>
+
+    </div>
+
+</div>
+
+    </header>
+
+
+    <div class="app-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <nav>
+
+                <a href="/">
+                    🏠
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="/products">
+                    📦
+                    <span>Products</span>
+                </a>
+
+                <a href="/customers">
+                    👥
+                    <span>Customers</span>
+                </a>
+
+                <a href="/billing">
+                    🧾
+                    <span>Create Bill</span>
+                </a>
+
+                <a href="/bill_history">
+                    📋
+                    <span>Bill History</span>
+                </a>
+
+                <a href="/dashboard"
+                   class="active">
+                    📊
+                    <span>Reports</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a href="#">
+                    ⚙️
+                    <span>Settings</span>
+                </a>
+
+                <a href="#">
+                    🚪
+                    <span>Logout</span>
+                </a>
+
+                <p>
+                    Inventory Billing System v1.0
+                </p>
+
+            </div>
+
+        </aside>
+
+
+        <!-- DASHBOARD -->
+
+        <main class="main-content">
+
+
+            <div class="page-title">
+
+                <div>
+
+                    <h2>Dashboard</h2>
+
+                    <p>
+                        Welcome back! Here's your shop overview.
+                    </p>
+
+                </div>
+
+                <div class="date">
+                    📅 Inventory Management
+                </div>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="stat-grid">
+
+
+                <div class="stat-card blue">
+
+                    <div class="stat-icon">
+                        💰
+                    </div>
+
+                    <div>
+
+                        <p>Total Sales</p>
+
+                        <h3>
+                            ₹{{ "%.2f"|format(total_sales) }}
+                        </h3>
+
+                        <small>
+                            Total generated sales
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card green">
+
+                    <div class="stat-icon">
+                        🧾
+                    </div>
+
+                    <div>
+
+                        <p>Total Bills</p>
+
+                        <h3>
+                            {{ total_bills }}
+                        </h3>
+
+                        <small>
+                            Generated bills
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card yellow">
+
+                    <div class="stat-icon">
+                        📦
+                    </div>
+
+                    <div>
+
+                        <p>Total Products</p>
+
+                        <h3>
+                            {{ total_products }}
+                        </h3>
+
+                        <small>
+                            Products in inventory
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card purple">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <p>Total Customers</p>
+
+                        <h3>
+                            {{ total_customers }}
+                        </h3>
+
+                        <small>
+                            Registered customers
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+    <!-- SALES OVERVIEW -->
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+
+        <div class="dashboard-card-header">
+
+            <h3>📊 Sales Overview</h3>
+
+            <span>
+                Product Sales
+            </span>
+
+        </div>
+
+        <div class="sales-chart">
+
+            {% if product_sales %}
+
+                {% for item in product_sales %}
+
+                <div class="bar-item">
+
+                    <div class="bar-value">
+                        ₹{{ "%.0f"|format(item["sales"]) }}
+                    </div>
+
+                    <div
+                        class="bar"
+                        style="height: {{ [item['sales'] / total_sales * 180, 20] | max }}px;"
+                    ></div>
+
+                    <div class="bar-label">
+                        {{ item["product_name"] }}
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>No sales data available.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- TOP SELLING PRODUCTS -->
+
+    <div class="dashboard-card">
+
+        <div class="dashboard-card-header">
+
+            <h3>🏆 Top Selling Products</h3>
+
+            <span>
+                Best Sellers
+            </span>
+
+        </div>
+
+        <div class="top-products">
+
+            {% for item in product_sales[:5] %}
+
+            <div class="top-product">
+
+                <div class="product-rank">
+                    {{ loop.index }}
+                </div>
+
+                <div class="product-info">
+
+                    <strong>
+                        {{ item["product_name"] }}
+                    </strong>
+
+                    <small>
+                        Sales: ₹{{ "%.2f"|format(item["sales"]) }}
+                    </small>
+
+                </div>
+
+                <div class="product-percent">
+
+                    {{ "%.0f"|format(
+                        (item["sales"] / total_sales * 100)
+                    ) }}%
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>        
+
+
+            <!-- SECOND ROW -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- LOW STOCK -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+
+                        <h3>
+                            ⚠️ Low Stock Products
+                        </h3>
+
+                        <span class="badge">
+                            {{ low_stock }}
+                        </span>
+
+                    </div>
+
+
+                    {% if low_stock_products %}
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Product</th>
+
+                                <th>Category</th>
+
+                                <th>Stock</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for product in low_stock_products %}
+
+                            <tr>
+
+                                <td>
+                                    {{ product["name"] }}
+                                </td>
+
+                                <td>
+                                    {{ product["category"] }}
+                                </td>
+
+                                <td>
+                                    {{ product["quantity"] }}
+                                </td>
+
+                                <td>
+
+                                    <span class="low-stock-badge">
+                                        Low Stock
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                    {% else %}
+
+                    <div class="empty-state">
+
+                        ✅ All products have sufficient stock.
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- RECENT BILLS -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+
+                        <h3>
+                            🧾 Recent Bills
+                        </h3>
+
+                        <a href="/bill_history">
+                            View All
+                        </a>
+
+                    </div>
+
+
+                    {% if recent_bills %}
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Customer</th>
+
+                                <th>Product</th>
+
+                                <th>Total</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for bill in recent_bills %}
+
+                            <tr>
+
+                                <td>
+                                    #{{ bill["id"] }}
+                                </td>
+
+                                <td>
+                                    {{ bill["customer_name"] }}
+                                </td>
+
+                                <td>
+                                    {{ bill["product_name"] }}
+                                </td>
+
+                                <td>
+                                    ₹{{ "%.2f"|format(bill["total"]) }}
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                    {% else %}
+
+                    <div class="empty-state">
+
+                        No bills generated yet.
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="section-card">
+
+                <div class="section-header">
+
+                    <h3>Quick Actions</h3>
+
+                    <span>
+                        Manage your shop
+                    </span>
+
+                </div>
+
+
+                <div class="quick-grid">
+
+
+                    <a href="/products"
+                       class="quick-button">
+
+                        📦
+
+                        <strong>
+                            Products
+                        </strong>
+
+                        <small>
+                            Add & manage products
+                        </small>
+
+                    </a>
+
+
+                    <a href="/customers"
+                       class="quick-button">
+
+                        👥
+
+                        <strong>
+                            Customers
+                        </strong>
+
+                        <small>
+                            Manage customers
+                        </small>
+
+                    </a>
+
+
+                    <a href="/billing"
+                       class="quick-button">
+
+                        🧾
+
+                        <strong>
+                            Create Bill
+                        </strong>
+
+                        <small>
+                            Generate a new bill
+                        </small>
+
+                    </a>
+
+
+                    <a href="/bill_history"
+                       class="quick-button">
+
+                        📋
+
+                        <strong>
+                            Bill History
+                        </strong>
+
+                        <small>
+                            View previous bills
+                        </small>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+    <script>
+
+function toggleNotifications() {
+
+    const notificationBox =
+        document.getElementById("notificationBox");
+
+    notificationBox.classList.toggle("show");
+
+}
+
+</script>
+
+</body>
+
+</html>

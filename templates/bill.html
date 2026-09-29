@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bill Preview - Inventory Billing</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="bill-page">
+
+    <div class="bill-container">
+
+        <!-- BILL HEADER -->
+
+        <div class="bill-header">
+
+            <div>
+
+                <h1>Inventory Billing</h1>
+
+                <p>Shop Management System</p>
+
+            </div>
+
+
+            <div class="bill-title">
+
+                <h2>INVOICE</h2>
+
+                <p>Bill No: #{{ bill_id }}</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMER DETAILS -->
+
+        <div class="bill-customer">
+
+            <div>
+
+                <strong>Bill To</strong>
+
+                <p>
+                    {{ customer_name }}
+                </p>
+
+            </div>
+
+
+            <div>
+               <strong>Date & Time</strong>
+                <p>{{ bill_date }}</p>
+           </div>
+
+        </div>
+
+
+        <!-- PRODUCTS TABLE -->
+
+        <table class="bill-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Product</th>
+
+                    <th>Price</th>
+
+                    <th>Quantity</th>
+
+                    <th>Total</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in items %}
+
+                <tr>
+
+                    <td>
+                        {{ loop.index }}
+                    </td>
+
+                    <td>
+                        {{ item['product_name'] }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(item['price']) }}
+                    </td>
+
+                    <td>
+                        {{ item['quantity'] }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(item['total']) }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <!-- GRAND TOTAL -->
+
+        <div class="bill-total">
+
+            <span>
+                Grand Total
+            </span>
+
+            <strong>
+                ₹{{ "%.2f"|format(total) }}
+            </strong>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="bill-footer">
+
+            <p>
+                Thank you for shopping with us!
+            </p>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="bill-actions no-print">
+
+            <button
+                onclick="window.print()"
+            >
+                🖨️ Print Bill
+            </button>
+
+
+            <a href="/billing">
+                ➕ New Bill
+            </a>
+
+
+            <a href="/bill_history">
+                📋 Bill History
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

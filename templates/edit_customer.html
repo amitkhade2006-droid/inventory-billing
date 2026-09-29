@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Customer - Inventory Billing System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<!-- TOP HEADER -->
+
+<header class="top-header">
+
+    <div class="brand">
+
+        <div class="brand-icon">🛒</div>
+
+        <div>
+            <h1>Inventory<span>Billing</span></h1>
+            <p>Inventory & Billing System</p>
+        </div>
+
+    </div>
+
+
+    <div class="top-search">
+
+        🔍
+
+        <input
+            type="text"
+            placeholder="Search products, customers, or bills..."
+        >
+
+    </div>
+
+
+    <div class="profile">
+
+        <span class="notification">🔔</span>
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div>
+            <strong>Admin</strong>
+            <small>Shop Owner</small>
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="app-layout">
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <nav>
+
+        <a href="/">
+            🏠
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/products">
+            📦
+            <span>Products</span>
+        </a>
+
+        <a href="/customers" class="active">
+            👥
+            <span>Customers</span>
+        </a>
+
+        <a href="/billing">
+            🧾
+            <span>Create Bill</span>
+        </a>
+
+        <a href="/bill_history">
+            📋
+            <span>Bill History</span>
+        </a>
+
+        <a href="/dashboard">
+            📊
+            <span>Reports</span>
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <a href="#">
+            ⚙️
+            <span>Settings</span>
+        </a>
+
+        <a href="#">
+            🚪
+            <span>Logout</span>
+        </a>
+
+        <p>
+            Inventory Billing System v1.0
+        </p>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN CONTENT -->
+
+<main class="main-content">
+
+
+    <div class="page-title">
+
+        <div>
+
+            <h2>Edit Customer</h2>
+
+            <p>
+                Update customer information.
+            </p>
+
+        </div>
+
+        <div class="date">
+            ✏️ Customer Management
+        </div>
+
+    </div>
+
+
+    <!-- EDIT CUSTOMER FORM -->
+
+    <div class="section-card">
+
+        <div class="section-header">
+
+            <h3>✏️ Edit Customer</h3>
+
+            <span>
+                Update customer details
+            </span>
+
+        </div>
+
+
+        <form method="POST">
+
+            <div class="product-form-grid">
+
+
+                <div>
+
+                    <label>
+                        Customer Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ customer['name'] }}"
+                        placeholder="Enter customer name"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Mobile Number
+                    </label>
+
+                    <input
+                        type="text"
+                        name="mobile"
+                        value="{{ customer['mobile'] }}"
+                        placeholder="Enter mobile number"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Address
+                    </label>
+
+                    <input
+                        type="text"
+                        name="address"
+                        value="{{ customer['address'] }}"
+                        placeholder="Enter customer address"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="edit-actions">
+
+                <button type="submit">
+                    💾 Save Changes
+                </button>
+
+                <a href="/customers"
+                   class="cancel-btn">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+</main>
+
+</div>
+
+</body>
+
+</html>

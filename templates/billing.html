@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Bill - Inventory Billing System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="billing-page">
+
+<header class="top-header">
+
+    <!-- LEFT BRAND -->
+    <div class="brand">
+        <div class="brand-icon">🛒</div>
+
+        <div>
+            <h1>
+                Inventory<span>Billing</span>
+            </h1>
+
+            <p>Inventory & Billing System</p>
+        </div>
+    </div>
+
+
+    <!-- CENTER SEARCH -->
+    <div class="top-search">
+
+        <span>🔍</span>
+
+        <input
+            type="text"
+            placeholder="Search products, customers, or bills..."
+        >
+
+    </div>
+
+
+    <!-- RIGHT PROFILE -->
+    <div class="profile">
+
+        <div class="notification">🔔</div>
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div>
+            <strong>Admin</strong>
+            <small>Shop Owner</small>
+        </div>
+
+    </div>
+
+</header>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+       
+
+        <a href="/dashboard">
+            📊 Dashboard
+        </a>
+
+        <a href="/products">
+            📦 Products
+        </a>
+
+        <a href="/customers">
+            👥 Customers
+        </a>
+
+        <a href="/billing" class="active">
+            🧾 Create Bill
+        </a>
+
+        <a href="/bill_history">
+            📋 Bill History
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <div class="page-title">
+
+            <div>
+                <h1>Create Bill</h1>
+                <p>Create a new customer bill</p>
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMER DETAILS -->
+
+        <div class="section-card">
+
+            <div class="section-header">
+                <h3>👤 Customer Details</h3>
+            </div>
+
+            <div class="product-form-grid">
+
+                <div>
+
+                    <label>Customer</label>
+
+                    <select id="customerSelect">
+
+                        <option value="">
+                            Select Customer
+                        </option>
+
+                        {% for customer in customers %}
+
+                        <option value="{{ customer['id'] }}">
+
+                            {{ customer['name'] }}
+                            - {{ customer['mobile'] }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD PRODUCTS -->
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <h3>🛒 Add Products</h3>
+
+            </div>
+
+
+            <div class="product-form-grid">
+
+                <!-- PRODUCT -->
+
+                <div>
+
+                    <label>Product</label>
+
+                    <select id="productSelect">
+
+                        <option value="">
+                            Select Product
+                        </option>
+
+                        {% for product in products %}
+
+                        <option
+                            value="{{ product['id'] }}"
+                            data-name="{{ product['name'] }}"
+                            data-price="{{ product['price'] }}"
+                            data-stock="{{ product['quantity'] }}"
+                        >
+
+                            {{ product['name'] }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- QUANTITY -->
+
+                <div>
+
+                    <label>Quantity</label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        min="1"
+                        placeholder="Enter quantity"
+                    >
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div>
+
+                    <label>Price</label>
+
+                    <input
+                        type="text"
+                        id="priceDisplay"
+                        placeholder="₹0.00"
+                        readonly
+                    >
+
+                </div>
+
+
+                <!-- STOCK -->
+
+                <div>
+
+                    <label>Available Stock</label>
+
+                    <input
+                        type="text"
+                        id="stockDisplay"
+                        placeholder="0"
+                        readonly
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ADD TO BILL BUTTON -->
+
+            <div style="margin-top:20px;">
+
+                <button
+                    type="button"
+                    onclick="addToBill()"
+                >
+                    ➕ Add to Bill
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BILL ITEMS -->
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <h3>🧾 Bill Items</h3>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Product Name</th>
+
+                            <th>Price</th>
+
+                            <th>Quantity</th>
+
+                            <th>Total</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="billItems">
+
+                        <tr id="emptyRow">
+
+                            <td
+                                colspan="6"
+                                style="text-align:center;"
+                            >
+
+                                No products added yet.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="bill-summary">
+
+                <div>
+
+                    <span>Total Amount</span>
+
+                    <strong id="grandTotal">
+                        ₹0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div
+                style="
+                display:flex;
+                gap:12px;
+                margin-top:20px;
+                "
+            >
+
+                <button
+                    type="button"
+                    onclick="generateBill()"
+                >
+                    🧾 Generate Bill
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="clearBill()"
+                    style="
+                    background:#6b7280;
+                    "
+                >
+                    ✖ Clear All
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="billing-info">
+
+            <div>
+                📦 Stock will be reduced automatically after billing.
+            </div>
+
+            <div>
+                🧾 Generated bills will be saved in Bill History.
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+let billItems = [];
+
+
+// PRODUCT SELECT
+
+const productSelect =
+    document.getElementById("productSelect");
+
+const quantityInput =
+    document.getElementById("quantity");
+
+const priceDisplay =
+    document.getElementById("priceDisplay");
+
+const stockDisplay =
+    document.getElementById("stockDisplay");
+
+
+// PRODUCT CHANGE
+
+productSelect.addEventListener("change", function () {
+
+    const selected =
+        productSelect.options[
+            productSelect.selectedIndex
+        ];
+
+    if (!selected.value) {
+
+        priceDisplay.value = "";
+        stockDisplay.value = "";
+
+        return;
+    }
+
+    const price =
+        parseFloat(selected.dataset.price);
+
+    const stock =
+        parseInt(selected.dataset.stock);
+
+    priceDisplay.value =
+        "₹" + price.toFixed(2);
+
+    stockDisplay.value =
+        stock;
+
+});
+
+
+// ADD PRODUCT
+
+function addToBill() {
+
+    const selected =
+        productSelect.options[
+            productSelect.selectedIndex
+        ];
+
+    const productId =
+        selected.value;
+
+    if (!productId) {
+
+        alert("Please select a product.");
+
+        return;
+    }
+
+
+    const quantity =
+        parseInt(quantityInput.value);
+
+
+    if (!quantity || quantity <= 0) {
+
+        alert("Please enter a valid quantity.");
+
+        return;
+    }
+
+
+    const stock =
+        parseInt(selected.dataset.stock);
+
+
+    if (quantity > stock) {
+
+        alert(
+            "Only " +
+            stock +
+            " quantity available."
+        );
+
+        return;
+    }
+
+
+    const productName =
+        selected.dataset.name;
+
+    const price =
+        parseFloat(selected.dataset.price);
+
+
+    // CHECK IF PRODUCT ALREADY EXISTS
+
+    const existing =
+        billItems.find(
+            item =>
+            item.productId == productId
+        );
+
+
+    if (existing) {
+
+        if (
+            existing.quantity + quantity
+            > stock
+        ) {
+
+            alert(
+                "You cannot add more than available stock."
+            );
+
+            return;
+        }
+
+        existing.quantity += quantity;
+
+        existing.total =
+            existing.price *
+            existing.quantity;
+
+    }
+
+    else {
+
+        billItems.push({
+
+            productId: productId,
+
+            productName: productName,
+
+            price: price,
+
+            quantity: quantity,
+
+            total: price * quantity
+
+        });
+
+    }
+
+
+    renderBillItems();
+
+
+    // RESET PRODUCT SECTION
+
+    productSelect.value = "";
+
+    quantityInput.value = "";
+
+    priceDisplay.value = "";
+
+    stockDisplay.value = "";
+
+}
+
+
+// DISPLAY BILL ITEMS
+
+function renderBillItems() {
+
+    const tbody =
+        document.getElementById("billItems");
+
+
+    tbody.innerHTML = "";
+
+
+    if (billItems.length === 0) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    style="text-align:center;"
+                >
+                    No products added yet.
+                </td>
+
+            </tr>
+
+        `;
+
+        document.getElementById(
+            "grandTotal"
+        ).textContent = "₹0.00";
+
+        return;
+    }
+
+
+    let grandTotal = 0;
+
+
+    billItems.forEach(
+        (item, index) => {
+
+            grandTotal += item.total;
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${item.productName}
+                </td>
+
+                <td>
+                    ₹${item.price.toFixed(2)}
+                </td>
+
+                <td>
+                    ${item.quantity}
+                </td>
+
+                <td>
+                    ₹${item.total.toFixed(2)}
+                </td>
+
+                <td>
+
+                    <button
+                        type="button"
+                        onclick="removeItem(${index})"
+                        style="
+                        background:#dc3545;
+                        padding:7px 12px;
+                        "
+                    >
+                        Remove
+                    </button>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        }
+    );
+
+
+    document.getElementById(
+        "grandTotal"
+    ).textContent =
+        "₹" + grandTotal.toFixed(2);
+
+}
+
+
+// REMOVE PRODUCT
+
+function removeItem(index) {
+
+    billItems.splice(index, 1);
+
+    renderBillItems();
+
+}
+
+
+// CLEAR ALL
+
+function clearBill() {
+
+    if (billItems.length === 0) {
+
+        return;
+
+    }
+
+
+    if (
+        confirm(
+            "Are you sure you want to clear all products?"
+        )
+    ) {
+
+        billItems = [];
+
+        renderBillItems();
+
+    }
+
+}
+
+
+// GENERATE BILL
+
+function generateBill() {
+
+    const customer =
+        document.getElementById(
+            "customerSelect"
+        ).value;
+
+
+    if (!customer) {
+
+        alert("Please select a customer.");
+
+        return;
+
+    }
+
+
+    if (billItems.length === 0) {
+
+        alert(
+            "Please add at least one product."
+        );
+
+        return;
+
+    }
+
+
+    // CREATE FORM
+
+    const form =
+        document.createElement("form");
+
+    form.method = "POST";
+
+    form.action = "/billing";
+
+
+    // CUSTOMER
+
+    const customerInput =
+        document.createElement("input");
+
+    customerInput.type = "hidden";
+
+    customerInput.name = "customer_id";
+
+    customerInput.value = customer;
+
+
+    form.appendChild(customerInput);
+
+
+    // BILL ITEMS JSON
+
+    const itemsInput =
+        document.createElement("input");
+
+    itemsInput.type = "hidden";
+
+    itemsInput.name = "bill_items";
+
+    itemsInput.value =
+        JSON.stringify(billItems);
+
+
+    form.appendChild(itemsInput);
+
+
+    document.body.appendChild(form);
+
+    form.submit();
+
+}
+
+</script>
+
+</body>
+</html>

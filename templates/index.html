@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Inventory Billing System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- TOP HEADER -->
+
+    <header class="top-header">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🛒
+            </div>
+
+            <div>
+                <h1>Inventory<span>Billing</span></h1>
+                <p>Inventory & Billing System</p>
+            </div>
+
+        </div>
+
+
+        <div class="top-search">
+
+            🔍
+
+            <input
+                type="text"
+                placeholder="Search products, customers, or bills..."
+            >
+
+        </div>
+
+
+        <div class="profile">
+
+            <span class="notification">🔔</span>
+
+            <div class="profile-icon">
+                👤
+            </div>
+
+            <div>
+
+                <strong>Admin</strong>
+
+                <small>Shop Owner</small>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN AREA -->
+
+    <div class="app-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <nav>
+
+                <a href="/"
+                   class="active">
+                    🏠
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="/products">
+                    📦
+                    <span>Products</span>
+                </a>
+
+                <a href="/customers">
+                    👥
+                    <span>Customers</span>
+                </a>
+
+                <a href="/billing">
+                    🧾
+                    <span>Create Bill</span>
+                </a>
+
+                <a href="/bill_history">
+                    📋
+                    <span>Bill History</span>
+                </a>
+
+                <a href="/dashboard">
+                    📊
+                    <span>Reports</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a href="#">
+                    ⚙️
+                    <span>Settings</span>
+                </a>
+
+                <a href="#">
+                    🚪
+                    <span>Logout</span>
+                </a>
+
+                <p>
+                    Inventory Billing System v1.0
+                </p>
+
+            </div>
+
+        </aside>
+
+
+        <!-- PAGE CONTENT -->
+
+        <main class="main-content">
+
+
+            <div class="page-title">
+
+                <div>
+
+                    <h2>Dashboard</h2>
+
+                    <p>
+                        Welcome back! Manage your shop easily.
+                    </p>
+
+                </div>
+
+                <div class="date">
+                    📅 Inventory Management
+                </div>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="stat-grid">
+
+
+                <div class="stat-card blue">
+
+                    <div class="stat-icon">
+                        🛒
+                    </div>
+
+                    <div>
+
+                        <p>Total Products</p>
+
+                        <h3>Manage</h3>
+
+                        <small>
+                            View your inventory
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card green">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <p>Total Customers</p>
+
+                        <h3>Manage</h3>
+
+                        <small>
+                            Customer information
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card yellow">
+
+                    <div class="stat-icon">
+                        🧾
+                    </div>
+
+                    <div>
+
+                        <p>Create Bill</p>
+
+                        <h3>Billing</h3>
+
+                        <small>
+                            Generate new bills
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card purple">
+
+                    <div class="stat-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <p>Dashboard</p>
+
+                        <h3>Reports</h3>
+
+                        <small>
+                            Sales & stock overview
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="section-card">
+
+                <div class="section-header">
+
+                    <h3>Quick Actions</h3>
+
+                    <span>
+                        Manage your shop
+                    </span>
+
+                </div>
+
+
+                <div class="quick-grid">
+
+                    <a href="/products"
+                       class="quick-button">
+
+                        📦
+                        <strong>Products</strong>
+
+                        <small>
+                            Add & manage products
+                        </small>
+
+                    </a>
+
+
+                    <a href="/customers"
+                       class="quick-button">
+
+                        👥
+                        <strong>Customers</strong>
+
+                        <small>
+                            Manage customers
+                        </small>
+
+                    </a>
+
+
+                    <a href="/billing"
+                       class="quick-button">
+
+                        🧾
+                        <strong>Create Bill</strong>
+
+                        <small>
+                            Generate a new bill
+                        </small>
+
+                    </a>
+
+
+                    <a href="/bill_history"
+                       class="quick-button">
+
+                        📋
+                        <strong>Bill History</strong>
+
+                        <small>
+                            View previous bills
+                        </small>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
