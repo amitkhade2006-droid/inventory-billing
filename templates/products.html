@@ -341,7 +341,26 @@
                         </td>
 
                         <td>
-                            {{ product["quantity"] }}
+                           <td>
+    <td>
+    <div class="stock-control">
+
+        <form method="POST"
+              action="/decrease_stock/{{ product['id'] }}">
+            <button type="submit" class="stock-btn minus">−</button>
+        </form>
+
+        <span class="stock-number">
+            {{ product["quantity"] }}
+        </span>
+
+        <form method="POST"
+              action="/increase_stock/{{ product['id'] }}">
+            <button type="submit" class="stock-btn plus">+</button>
+        </form>
+
+    </div>
+</td>
                         </td>
 
                         <td>

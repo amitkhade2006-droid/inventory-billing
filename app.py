@@ -191,6 +191,39 @@ def edit_product(id):
 
     return render_template("edit.html", product=product)
 
+@app.route("/increase_stock/<int:id>", methods=["POST"])
+def increase_stock(id):
+    conn = sqlite3.connect("shop.db")
+
+    conn.execute(
+        "UPDATE products SET quantity = quantity + 1 WHERE id = ?",
+        (id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/products")
+
+
+@app.route("/decrease_stock/<int:id>", methods=["POST"])
+def decrease_stock(id):
+    conn = sqlite3.connect("shop.db")
+
+    conn.execute(
+        """
+        UPDATE products
+        SET quantity = quantity - 1
+        WHERE id = ? AND quantity > 0
+        """,
+        (id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/products")
+
 @app.route("/customers", methods=["GET", "POST"])
 def customers():
 

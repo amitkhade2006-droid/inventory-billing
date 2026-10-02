@@ -1478,3 +1478,48 @@ hr {
     visibility: visible !important;
     opacity: 1 !important;
 }
+.stock-control {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.stock-control form {
+    display: inline-flex !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+}
+
+.stock-btn {
+    width: 36px !important;
+    height: 32px !important;
+    min-width: 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-size: 18px !important;
+    font-weight: bold;
+    line-height: 32px;
+    cursor: pointer;
+}
+
+.stock-btn.minus {
+    background: #ffe1e1 !important;
+    color: #dc2626 !important;
+}
+
+.stock-btn.plus {
+    background: #dbeafe !important;
+    color: #2563eb !important;
+}
+
+.stock-number {
+    min-width: 32px;
+    text-align: center;
+    font-weight: 600;
+}
